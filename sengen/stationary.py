@@ -10,7 +10,7 @@ contributor:
 
 
 """
-from generator.abstract_generator import AbstractGenerator
+from sengen.abstract_generator import AbstractGenerator
 
 import random
 import numpy as np

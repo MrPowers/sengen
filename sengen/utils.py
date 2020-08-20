@@ -36,7 +36,7 @@ class Input:
         self.__necessary_params = list()
         for _, params in self.spec_helper.category_option.items():
             self.__necessary_params.append(params["__important"])
-    
+
     def __check_for_important_parameters(self, params={}):
         """
         A Important Parameter Checker
@@ -51,15 +51,15 @@ class Input:
 
         This function checks whether the unique parameter is present in the input parameters or not.
         The function returns a single important parameter if the important parameters is well specified.
-        
+
         Keyword Arguments:
             params {dict} -- [a dictionary of raw input parameters] (default: {{}})
-        
+
         Raises:
             ValueError -- [raise if destination sensor name is abscent]
             ValueError -- [raise if unique and important parameter is unspecified]
             ValueError -- [raise if more than one important parameters are specified]
-        
+
         Returns:
             [str] -- [returns the important parameter value]
         """
@@ -91,7 +91,7 @@ class Input:
 
         This function adds a desired option based on the user input parameters and generates an option dictionary
         for SensorDataGenerator class. Specific available options are explained as follows:
-    
+
         [Example]
 
         ex1) sdg_input.add_option(sensor_names="Sensor1", distribution="normal", mu=0, sigma=2)
@@ -99,7 +99,7 @@ class Input:
 
         If SensorDataGenerator is empty,
         the numbers must be generated first or load data from either .csv or .xlsx .
-        
+
         After generation or data loading,
         the data can be modified by SensorDataGenerator w/ modification option.
 
@@ -141,7 +141,7 @@ class Input:
         ========================================================================
 
         [Supported Distributions and Its Declaration Example]
-        
+
         ==================================================================================
         |          Type          |     Declare as (=default parameter)                   |
         ==================================================================================
@@ -166,7 +166,7 @@ class Input:
         for key, value in kwargs.items():
             if key != "sensor_names":
                 specific_param[key] = value
-            
+
 
         generator = self.spec_helper.check_category(important_param)
         specific_param = self.spec_helper.get_complete_param_value(generator, specific_param, len(sname.split()))
@@ -190,18 +190,18 @@ class Input:
 
         [What is this?]
 
-        This function merges selected stationary sensors to create copula input option.  
-        The following copula type(s) is/are supported:  
+        This function merges selected stationary sensors to create copula input option.
+        The following copula type(s) is/are supported:
         1. Gaussian Copula (currently the only supported type)
         2. ...
-        
+
         Keyword Arguments:
             sensor_names {str} -- [source sensors in previously created options] (default: {""})
             copula_type {str} -- [type of copula to be used] (default: {"gaussian"})
             cov {2D N x N Array} -- [covariance matrix of copula] (default: {None})
             frm {int} -- [range parameter] (default: {None})
             to {int} -- [range parameter] (default: {None})
-        
+
         Raises:
             ValueError -- [raise if covariance is unspecified]
             ValueError -- [raise if the number of sensors selected is not equal to a dimension of the covariance matrix]
@@ -218,7 +218,7 @@ class Input:
         cov = np.array(cov)
         if cov.shape[0] != len(sname_list):
             raise ValueError("the number of sensor names must be equal to the dimension of the covariance matrix")
-        
+
         params = {"copula":copula_type}
         if frm is not None and isinstance(frm, (int, np.int_)):
             params["frm"] = frm
@@ -273,11 +273,11 @@ class SpecHelper:
 
     # Constructor
     def __init__(self):
-        
+
         # Supported Options
         self.__stationary =     {"__important":"distribution",
-                                 "normal" : "mu,sigma", 
-                                 "gaussian" :  "mu,sigma", 
+                                 "normal" : "mu,sigma",
+                                 "gaussian" :  "mu,sigma",
                                  "multivariatenormal" : "mu,cov",
                                  "lognormal" : "mu,sigma",
                                  "beta" : "alpha,beta",
@@ -352,7 +352,7 @@ class SpecHelper:
         for p in req_params:
             if p not in params.keys():
                 params[p] = default_params[p]
-        
+
         return params
 
     def __set_missing_custom_attractor_params(self, params={}):
@@ -374,7 +374,7 @@ class SpecHelper:
                 out = "unspecified parameter: "+str(p)
                 out += "\nthe following parameters must be defined: "+str(req_params)
                 raise ValueError(out)
-        
+
         return params
 
     def __set_missing_custom_equation_params(self, params={}):
@@ -389,7 +389,7 @@ class SpecHelper:
                 params["initial"] = {}
                 for var in variables:
                     params["initial"][var] = 1.0
-        
+
         else:
             out = "Warning! Using Default Input:\n"
             default_params = {"eq"  : "x+y-x/y+x*y+x**2",
@@ -408,7 +408,7 @@ class SpecHelper:
     def __set_missing_stationary_params(self, params={}, n_feature=1):
         if "distribution" not in params.keys():
             raise ValueError("incorrect distribution specification:", params)
-        
+
         if params["distribution"] == "multivariatenormal" and n_feature == 1:
             raise ValueError("multivariatenormal distribution must have n_feature >= 2")
 
@@ -416,7 +416,7 @@ class SpecHelper:
         for p in req_params:
             if p not in params.keys():
                 params[p] = self.get_default_param_value(p, n_feature)
-        
+
         return params
 
 
@@ -435,11 +435,11 @@ class SpecHelper:
             return False
         if params:
             raise NotImplementedError
-        
+
     def check_category(self, important_param=""):
         """
             To see if which generator the option belongs to.
-        
+
         """
         for category, option in self.category_option.items():
             if option["__important"] == important_param:
@@ -450,7 +450,7 @@ class SpecHelper:
     def get_complete_param_value(self, generator="", params={}, n_feature=1):
         """
             Generating Complete Parameters for Specified Generator and Category
-        
+
         """
         # Unsupported Generator Type
         if generator not in self.category_option.keys():
@@ -488,7 +488,7 @@ class SpecHelper:
 
         else:
             raise NotImplementedError
-        
+
         self.omit_redundant_params(params)
         return params
 
@@ -513,7 +513,7 @@ class SpecHelper:
             value = value.reshape(n_feature, n_feature)
         else:
             value =  self.default_param_value[param]
-        
+
         return value
 
     def omit_redundant_params(self, params={}):
@@ -531,13 +531,13 @@ class SpecHelper:
         #     req_params = self.required_params(option=params["future"] or "future_all")
         else:
             raise NotImplementedError
-    
+
         req_params += ["frm", "to"]
-        
+
         for p in params_copy.keys():
             if p not in req_params:
                 params.pop(p)
-        
+
         return params
 
     def required_params(self, option=""):
@@ -549,7 +549,7 @@ class SpecHelper:
 
         if len(req_params) == 0:
             ValueError("could not find required parameters for:", option)
-            
+
         return req_params
 
     def supported_generators(self):

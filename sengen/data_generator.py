@@ -21,11 +21,11 @@ import matplotlib.pyplot as plt
 from scipy import random, linalg, stats
 from sklearn.preprocessing import Normalizer, StandardScaler
 
-from generator.utils import Input
-from generator.stationary import Stationary as st
-from generator.attractor import Attractor as at
-from generator.custom_equation import CustomEquation as ce
-from generator.custom_attractor import CustomAttractor as cat
+from sengen.utils import Input
+from sengen.stationary import Stationary as st
+from sengen.attractor import Attractor as at
+from sengen.custom_equation import CustomEquation as ce
+from sengen.custom_attractor import CustomAttractor as cat
 ##[import_new_generator]
 ##from generator.future_generator import FutureGen as fg
 
@@ -48,7 +48,7 @@ class SensorDataGenerator(object):
     Please refer to "generator.utils Input" for input details
     Please refer to "generator.abstract_generator" for basic generator module details
     Generator modules are available at "generator".
-    
+
     """
 
     # Constructor
@@ -82,7 +82,7 @@ class SensorDataGenerator(object):
 
         Keyword Arguments:
             input {dict} -- [generation input from "generation_input"]
-        
+
         Returns:
             [dict] -- [returns a dictionary of sensor names and generator objects]
             [dict] -- [returns a dictionary of sensor names and the range parameters]
@@ -108,7 +108,7 @@ class SensorDataGenerator(object):
                         raise ValueError("invalid range: 0 <= frm < to <= sample_size! to:", params["to"], "sample size:", self.sample_size)
                     else:
                         to = params["to"]
-                
+
                 frm, to = int(frm), int(to)
                 if frm >= to:
                     raise ValueError("invalid range: 0 <= frm < to <= sample_size! frm, to:", frm, to, "sample size:", self.sample_size)
@@ -148,10 +148,10 @@ class SensorDataGenerator(object):
 
         Arguments:
             sens_generator_mapping {dict} -- [generated data: (key: sensor name, value: generated numbers)]
-        
+
         Keyword Arguments:
             seed {int} -- [a seed number for random number generation] (default: {None})
-        
+
         Returns:
             [dict] -- [returns a dictionary that has sensor names as keys and generated numbers as values]
         """
@@ -201,12 +201,12 @@ class SensorDataGenerator(object):
         frm = 0
         to = self.sample_size
         max_size = self.sample_size
-        
+
         Keyword Arguments:
             frm {int} -- [range parameter: start] (default: {None})
             to {int} -- [range parameter: end] (default: {None})
             max_size {int} -- [upper limit of "to"] (default: {None})
-        
+
         Raises:
             ValueError -- [raise if frm is not an integer]
             ValueError -- [raise if frm is out of correct range]
@@ -249,7 +249,7 @@ class SensorDataGenerator(object):
 
         Keyword Arguments:
             sensors {list} -- [list of sensor names] (default: {[]})
-        
+
         Raises:
             ValueError -- [raise if cannot find sensor from the data table]
         """
@@ -267,7 +267,7 @@ class SensorDataGenerator(object):
         A Calculation Parameter Checker
 
         [What is this?]
-        
+
         This function checks required parameter values for sum, sub, mult, div functions.
         The default parameters are set as follows:
         - sensors = list of all sensor names if empty list
@@ -280,7 +280,7 @@ class SensorDataGenerator(object):
             save_to {str} -- [name of destination sensor] (default: {None})
             frm {int} -- [range parameter] (default: {None})
             to {int} -- [range parameter] (default: {None})
-        
+
         Returns:
             [list, str, int, int] -- [returns list of sensor names, destination sensor name, and range parameters]
         """
@@ -378,7 +378,7 @@ class SensorDataGenerator(object):
             label {str, int, float} -- [desired label] (default: {""})
             frm {int} -- [range parameter] (default: {None})
             to {int} -- [range parameter] (default: {None})
-        
+
         Returns:
             [pandas.DataFrame] -- [returns changed data table]
         """
@@ -388,7 +388,7 @@ class SensorDataGenerator(object):
         index = np.arange(frm, to, 1)
 
         self.inject(value=label, sensor=save_to, index=index)
-        
+
         return self.data
 
     def add_index(self, indices=[]):
@@ -399,10 +399,10 @@ class SensorDataGenerator(object):
 
         This function takes "indices", which should be a list of unique index,
         and sets "indices" as the index of data table.
-        
+
         Keyword Arguments:
             indices {list} -- [a list of unique index] (default: {[]})
-        
+
         Raises:
             ValueError -- [raise if not all indices are unique]
             ValueError -- [raise if the number of index is not equal to data table's sample size]
@@ -417,9 +417,9 @@ class SensorDataGenerator(object):
             out += "\n indices: "+str(len(indices))
             out += "\n sample_size: "+str(self.sample_size)
             raise ValueError(out)
-        
+
         self.data.index = indices
-        
+
         return self.data
 
     def add_time(self, year=2017, month=12, date=21, time_interval=[]):
@@ -434,7 +434,7 @@ class SensorDataGenerator(object):
         2. an array of integers/floats: ex) np.random.uniform(0, 1, dg.sample_size)
                                         w/ the array option, the number of elements in the array
                                         must be equal to the sample size of the data generator.
-        
+
         This function uses "add_index" function.
         For more information, please refer to "add_index" function.
 
@@ -444,7 +444,7 @@ class SensorDataGenerator(object):
             month {int} -- [start month] (default: {12})
             date {int} -- [start date] (default: {21})
             time_interval {start int} -- [time interval of data table indices] (default: {1})
-        
+
         Returns:
             [pandas.DataFrame] -- [returns changed data table]
         """
@@ -464,7 +464,7 @@ class SensorDataGenerator(object):
                 raise ValueError(out)
             else:
                 step_is_array = True
-        
+
         time_stamp = list()
         dt = datetime.datetime(year, month, date)
         for i in range(self.sample_size):
@@ -515,7 +515,7 @@ class SensorDataGenerator(object):
 
         Keyword Arguments:
             file_name {str} -- [filename to load] (default: {""})
-        
+
         Returns:
             [pandas.DataFrame] -- [returns loaded data table]
         """
@@ -535,7 +535,7 @@ class SensorDataGenerator(object):
         Keyword Arguments:
             file_name {str} -- [filename to load] (default: {""})
             sheet_name {str} -- [sheet name to load] (default: {""})
-        
+
         Returns:
             [pandas.DataFrame] -- [returns loaded data table]
         """
@@ -565,7 +565,7 @@ class SensorDataGenerator(object):
         fig.set_size_inches(27, 4.5)
         fig.suptitle("Generated Numbers Plot", fontsize=16)
         plt.ylabel('numbers')
-        for sname in sensors: 
+        for sname in sensors:
             plt.plot(self.data[sname], label=sname, marker=".")
 
         ax.legend(loc='center right', bbox_to_anchor=(1.12, 0.5), shadow=True, ncol=1)
@@ -574,7 +574,7 @@ class SensorDataGenerator(object):
         loc = [i for i in range(num_data) if i%amount == 0 and i >= 0 and i < num_data or i == num_data-1]
         stamp = [self.data.index.values[i] for i in range(num_data) if i%amount == 0 and i >= 0 and i < num_data or i == num_data-1]
         plt.xticks(loc, stamp)
-        if file_name is not None: 
+        if file_name is not None:
             file_name = file_name+".png"
             savefig(file_name)
             print("  result saved as:",file_name)
@@ -588,7 +588,7 @@ class SensorDataGenerator(object):
         [What is this?]
 
         This function returns the shape of data table.
-        
+
         Returns:
             [tuple] -- [returns (row, col)]
         """
@@ -598,7 +598,7 @@ class SensorDataGenerator(object):
     def save_as_csv(self, file_name="hello_world", frm=None, to=None):
         """
         Data Export Helper [.csv]
-        
+
         Keyword Arguments:
             file_name {str} -- [filename to be used to save data table] (default: {"hello_world"})
             frm {[type]} -- [range parameter] (default: {None})
@@ -613,7 +613,7 @@ class SensorDataGenerator(object):
 
     def save_as_excel(self, file_name="hello_world", sheet_name="data", frm=None, to=None):
         """
-        
+
         Keyword Arguments:
             file_name {str} -- [filename to be used to save data table] (default: {"hello_world"})
             frm {[type]} -- [range parameter] (default: {None})
@@ -639,7 +639,7 @@ class SensorDataGenerator(object):
             set parameter "seed=DesiredInteger".
 
         By default, pseudo-random integer will be used.
-        
+
         Keyword Arguments:
             number {int} -- [the seed number to be used] (default: {None})
 
@@ -649,7 +649,7 @@ class SensorDataGenerator(object):
 
         if number is None:
             number = random.randint(0, self.MAX_INT)
-        
+
         np.random.seed(number)
 
 
@@ -663,28 +663,28 @@ class SensorDataGenerator(object):
         This function generates numbers to specified sensors by generation input,
         and saves the numbers into the data table as pandas.DataFrame .
 
-        Therefore, options must have been added to generation_input  
-        through "generation_input.add_option" or other input options such as "copula"  
+        Therefore, options must have been added to generation_input
+        through "generation_input.add_option" or other input options such as "copula"
         in order to generate numbers with this function.
 
-        Users can control the seed for random number generation  
+        Users can control the seed for random number generation
         by specifying custom "seed" parameter.
 
-        Once data table is generated,  
-        users are allowed to resize data table with another generation.  
-        This option is only applied iff the sample_size input is different from  
+        Once data table is generated,
+        users are allowed to resize data table with another generation.
+        This option is only applied iff the sample_size input is different from
         previously used sample_size.
-        
+
         Keyword Arguments:
             sample_size {int} -- [the number of samples to generate] (default: {1000})
             resize {bool} -- [True to resize data table w/ new sample_size, False if not] (default: {False})
             seed {[type]} -- [seed for generation] (default: {None})
-        
+
         Raises:
             ValueError -- [raise if sample_size input is invalid]
             ValueError -- [raise if sample_size is undefined]
             ValueError -- [raise if users attempt to resize data table w/o generating data table beforehand]
-        
+
         Returns:
             [pandas.DataFrame] -- [returns generated data table]
         """
@@ -730,7 +730,7 @@ class SensorDataGenerator(object):
                     temp_data_table[sn][frm:to] = data
                 else:
                     self.__assign_new_data(sn, frm, to, data)
-        
+
         if self.data is None:
             self.data = pd.DataFrame(temp_data_table)
 
@@ -744,19 +744,19 @@ class SensorDataGenerator(object):
 
         This function generates a covariance matrix given sigmas and correlation matrix.
         By default, a 2x2 covariance matrix w/ stdev=1 and random eigenvalue is generated.
-        
+
         Keyword Arguments:
             dim {int} -- [dimension of covariance matrix] (default: {2})
             sigmas {list} -- [a list of standard deviations] (default: {None})
             corrs {np.ndarray} -- [correlation matrix] (default: {None})
             seed {int} -- [seed for numpy.random] (default: {None})
-        
+
         Raises:
             ValueError -- [raise if sigmas < 0]
             ValueError -- [raise if len(sigmas) != dim]
             ValueError -- [raise if correlation is not n by n square matrix]
             ValueError -- [raise if correlation value not in [-1.0, 1.0]]
-        
+
         Returns:
             [numpy.array] -- [returns Dim x Dim covariance matrix]
         """
@@ -795,9 +795,9 @@ class SensorDataGenerator(object):
         This function safely creates/replaces data in the data table
         to "new_data" given frm & to range parameter.
 
-        The range parameters are set to 0 and sample size respectively  
+        The range parameters are set to 0 and sample size respectively
         by default if nothing is specified.
-        
+
         Keyword Arguments:
             destination {str} -- [destination sensor name] (default: {""})
             frm {int} -- [range parameter] (default: {None})
@@ -822,10 +822,10 @@ class SensorDataGenerator(object):
 
         This function drops specified sensors in "sensors"
         from the data table.
-        
+
         Keyword Arguments:
             sensors {list} -- [list of sensor names] (default: {[]})
-        
+
         Returns:
             [pandas.DataFrame] -- [returns changed data table]
         """
@@ -841,9 +841,9 @@ class SensorDataGenerator(object):
         [What is this?]
 
         This function duplicates selected sensor data to destination sensor.
-        The range parameters "frm" and "to" are set to 0 and sample_size  
-        if users do not specify. 
-        
+        The range parameters "frm" and "to" are set to 0 and sample_size
+        if users do not specify.
+
         Keyword Arguments:
             sensor {str} -- [name of source sensor] (default: {None})
             save_to {str} -- [name of destination sensor] (default: {None})
@@ -873,7 +873,7 @@ class SensorDataGenerator(object):
             value {any value} -- [desired value] (default: {None})
             sensor {str} -- [destination sensor] (default: {None})
             index {int, np.array} -- [desired index/indices] (default: {-1})
-        
+
         Raises:
             ValueError -- [raise if index is out of range]
             ValueError -- [raise if some indices are out of range]
@@ -902,7 +902,7 @@ class SensorDataGenerator(object):
         This function selects a desired value for each iteration of selected sensor data
         by using probability value for each sensor data column w/ multinomial process and
         saves into a destination sensor "save_to" to corresponding index.
-        
+
         Keyword Arguments:
             sensors {list} -- [list of source sensors] (default: {[]})
             pval {list, np.array} -- [list or 2D array of pvals for each sensor] (default: {[]})
@@ -912,14 +912,14 @@ class SensorDataGenerator(object):
             seed {[type]} -- [seed for numpy.random] (default: {None})
             frm {[type]} -- [range parameter] (default: {None})
             to {[type]} -- [range parameter] (default: {None})
-        
+
         Raises:
             ValueError -- [raise if the number of pvals is insufficient or overly provided (not sample_wise)]
             ValueError -- [raise if the sum of pvals is not equal to 1]
             ValueError -- [raise if the number of pvals is insufficient or overly provided within a single time step (sample_wise)]
             ValueError -- [raise if the number of pvals samples is insufficient or overly provided]
             ValueError -- [raise if the sum of pvals within a single time step is not equal to 1]
-        
+
         Returns:
             [pandas.DataFrame] -- [returns changed data table]
         """
@@ -958,7 +958,7 @@ class SensorDataGenerator(object):
             self.drop_sensors(sensors)
 
         self.__assign_new_data(save_to,frm,to,new_data)
-        
+
         return self.data
 
     def randomly_inject_null(self, sensor=[], seed=None):
@@ -966,11 +966,11 @@ class SensorDataGenerator(object):
         A Random Null Injector
 
         [What is this?]
-        
+
         Keyword Arguments:
             sensor {list} -- [list of sensor names] (default: {[]})
             seed {int} -- [seed for random generation] (default: {None})
-        
+
         Returns:
             [pandas.DataFrame] -- [returns changed data talbe]
         """
@@ -1012,7 +1012,7 @@ class SensorDataGenerator(object):
         [What is this?]
 
         This function replaces sensor data to destination data
-        
+
         Keyword Arguments:
             source {list} -- [list of sensor names] (default: {[]})
             destination {list} -- [list of destination sensor names] (default: {[]})
@@ -1039,14 +1039,14 @@ class SensorDataGenerator(object):
         [What is this?]
 
         This function reorders each sensor data in reverse order.
-        
+
         Keyword Arguments:
             sensor {list} -- [list of sensor names] (default: {[]})
             axis {int} -- [0: reversed sample order, 1: reversed column order] (default: {0})
-        
+
         Raises:
             ValueError -- [raise if axis is not 0 or 1]
-        
+
         Returns:
             [pandas.DataFrame] -- [returns changed data table]
         """
@@ -1065,12 +1065,12 @@ class SensorDataGenerator(object):
             if frm_idx == 0 and to_idx == self.sample_size:
                 self.data = self.data.iloc[::-1]
             else:
-                
+
                 self.data.loc[frm:to,sensors] = self.data.loc[frm:to,sensors][::-1].values
                 index_list=self.data.index.to_list()
                 index_list[frm_idx:to_idx] = index_list[frm_idx:to_idx][::-1]
                 self.data.index = index_list
-                
+
         elif axis == 1:
             sensors.reverse()
             self.data = self.data[sensors]
@@ -1086,7 +1086,7 @@ class SensorDataGenerator(object):
         [What is this?]
 
         This function calculates weighted sums among different sensors and saves to "save_to" sensor.
-        
+
         Keyword Arguments:
             sensors {list} -- [list of source sensor names] (default: {[]})
             weight {list} -- [1D or 2D list of weights for each sensor/sample] (default: {[]})
@@ -1094,11 +1094,11 @@ class SensorDataGenerator(object):
             save_to {str} -- [destination sensor name] (default: {None})
             frm {int} -- [range parameter] (default: {None})
             to {int} -- [range parameter] (default: {None})
-        
+
         Raises:
             ValueError -- [raise if sample_wise weight has incorrect shape]
             ValueError -- [raise if some weights are missing for some sensors]
-        
+
         Returns:
             [pandas.DataFrame] -- [returns changed data table]
         """
@@ -1131,10 +1131,10 @@ class SensorDataGenerator(object):
 
         This function normalized each sensor column into [l1, l2, or max] scale.
         For the normalization process, The "sklearn.preprocessing Normalizer" is used.
-        
+
         Keyword Arguments:
             option {str} -- [normalization option] (default: {"l2"})
-        
+
         Returns:
             [pandas.DataFrame] -- [returns changed data table]
         """

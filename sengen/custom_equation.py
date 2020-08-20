@@ -13,7 +13,7 @@ https://docs.sympy.org/latest/tutorial/intro.html
 https://github.com/sympy/sympy/wiki/Quick-examples
 
 """
-from generator.abstract_generator import AbstractGenerator
+from sengen.abstract_generator import AbstractGenerator
 
 import numpy as np
 
